@@ -1,5 +1,6 @@
 import os
 import re
+import time
 
 def find_between( s, first, last ):
     try:
@@ -32,3 +33,6 @@ try:
     print(psw)
 except AttributeError:
     pass
+
+while True:
+    time.sleep(10)
