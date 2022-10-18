@@ -1,23 +1,34 @@
-import threading
-import time
 import os
+import re
 
-class Person:
-    def __init__(self, name):
-        self.name = name
+def find_between( s, first, last ):
+    try:
+        start = s.index( first ) + len( first )
+        end = s.index( last, start )
+        return s[start:end]
+    except ValueError:
+        return ""
 
-    def sayHello(self):
-        print("Hello i'm " + self.name)
+strSSID = 'SSID'
+strBSSID = 'BSSID'
+strContenutoChiave = "Contenuto chiave"
 
-person1 = Person("Marco")
+interfaces = os.popen('netsh wlan show interfaces').read()
 
-# Creating three sample threads
-worker_1 = threading.Thread(target=person1)
+if strSSID in interfaces:
+    if strBSSID in interfaces:
+        connectionName = find_between(find_between(interfaces, strSSID, strBSSID), ': ', '\n')
 
+stringCheckPsw = 'netsh wlan show profile name="' + connectionName + '" key=clear'
+connectionData = os.popen(stringCheckPsw).read()
 
-# Starting three threads
-worker_1.start()
+if strContenutoChiave in connectionData:
+    str = find_between(connectionData, strContenutoChiave, '\n')
 
+last_char = str[-1]
 
-
-
+try:
+    psw = re.search(': (.+?)'+last_char, str).group(1)
+    print(psw)
+except AttributeError:
+    pass
