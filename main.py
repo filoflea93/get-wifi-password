@@ -30,7 +30,10 @@ last_char = str[-1]
 
 try:
     psw = re.search(': (.+?)'+last_char, str).group(1)
-    print(psw)
+    print('**********************************')
+    print('Connection name: ' + connectionName)
+    print('Password: ' + psw)
+    print('**********************************')
 except AttributeError:
     pass
 
